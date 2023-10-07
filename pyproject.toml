@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "track-analyzer"
+version = "0.1.0"
+description = "Spotify track analyzer"
+authors = ["José Loarca <joseloarca97@icloud.com>"]
+readme = "README.md"
+packages = [{include = "track_analyzer"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
