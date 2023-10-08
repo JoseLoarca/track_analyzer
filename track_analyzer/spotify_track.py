@@ -49,6 +49,7 @@ class SpotifyTrack:
         if self._explicit is not None:
             return self._explicit
 
+    @property
     def human_duration(self) -> Optional[str]:
         """Returns the duration of the track a human friendly format: min:sec.
         This is done by:
