@@ -2,12 +2,12 @@ import logging
 import os
 from typing import Optional
 
-from track_analyzer.auth import SpotifyAuth
-from track_analyzer.exceptions import SpotifyInvalidContentError
-from track_analyzer.spotify_album import SpotifyAlbum, SpotifyAlbumReleaseDate
-from track_analyzer.spotify_artist import SpotifyArtist
-from track_analyzer.spotify_track import SpotifyTrack
-from track_analyzer.utils import make_http_request
+from .auth import SpotifyAuth
+from .exceptions import SpotifyInvalidContentError
+from .spotify_album import SpotifyAlbum, SpotifyAlbumReleaseDate
+from .spotify_artist import SpotifyArtist
+from .spotify_track import SpotifyTrack
+from .utils import make_http_request
 
 DEFAULT_MARKET: str = os.environ.get('DEFAULT_MARKET', 'GT')  # Default the market to Guatemala
 
@@ -123,13 +123,3 @@ def _extract_track_info_from_response(track_info_from_response: dict,
 
     return spotify_track
 
-
-
-
-if __name__ == '__main__':
-    spotify_client = SpotifyClient('fe96fe66ef674b80b924b13faa97e627', '924fdbb9ef7c4df0bb6432d6fd619bdb')
-
-    track = spotify_client.search_track('la bebé')
-    print(track)
-    print(str(track))
-    print(repr(track))

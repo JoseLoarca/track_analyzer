@@ -49,9 +49,13 @@ class SpotifyTrack:
         self._explicit = explicit
 
     def __str__(self):
-        return self.name
+        """Returns a human friendly representation of a SpotifyTrack instance
+        """
+        return f"{self.name} ({self.track_id})"
 
     def __repr__(self):
+        """Returns the string representation of a SpotifyTrack instance
+        """
         return f"SpotifyTrack({self.name}, {self.track_id})"
 
     @property
