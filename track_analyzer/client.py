@@ -13,5 +13,5 @@ class SpotifyClient:
             client_secret (str): the Spotify's Client Secret obtained from the Developer dashboard
         """
         self.auth = SpotifyAuth(client_id, client_secret)
-        self.base_url = 'https://api.spotify.com/v1/'
+        self.base_url = 'https://api.spotify.com/v1'
 

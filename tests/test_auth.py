@@ -5,14 +5,16 @@ from track_analyzer.auth import SpotifyAuth
 from track_analyzer.exceptions import SpotifyAuthenticationError
 
 
+@mock.patch('track_analyzer.auth.requests.post')  # Mock at class level as all the tests will use it
 class TestAuth(TestCase):
+    """This class contains a collection of different test cases related to authentication to the Spotify API
+    """
 
     def setUp(self):
         """Setup common variables
         """
         self.spotify_auth = SpotifyAuth('my_client_id', 'my_client_secret')
 
-    @mock.patch('track_analyzer.auth.requests.post')
     def test_generate_access_token(self, mock_requests_post):
         """Make sure a token is generated when the Spotify API returns a valid access_token
         """
@@ -23,7 +25,6 @@ class TestAuth(TestCase):
         # Assert the token was generated successfully
         self.assertEqual(self.spotify_auth.access_token, "spotify_access_token")
 
-    @mock.patch('track_analyzer.auth.requests.post')
     def test_generate_access_token_fails(self, mock_requests_post):
         """Make sure a SpotifyAuthenticationError exception is raised if the Spotify API doesn't return a valid response
         """
@@ -41,7 +42,6 @@ class TestAuth(TestCase):
             self.assertIn(f"Could not generate access token. Status code: {codes.too_many_requests}",
                           log.output[0])
 
-    @mock.patch('track_analyzer.auth.requests.post')
     def test_access_token_is_generated_when_no_token(self, mock_requests_post):
         """Make sure a new access token is generated if the SpotifyAuth object doesn't already contain one
         """
