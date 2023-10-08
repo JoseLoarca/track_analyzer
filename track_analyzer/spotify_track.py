@@ -1,5 +1,7 @@
 from typing import Optional
 
+from .spotify_album import SpotifyAlbum
+from .spotify_artist import SpotifyArtist
 from .spotify_audio_features import SpotifyAudioFeatures
 
 
@@ -14,6 +16,8 @@ class SpotifyTrack:
 
                  popularity: Optional[int] = None,
                  duration: Optional[int] = None,
+                 album: Optional[SpotifyAlbum] = None,
+                 artists: Optional[list[SpotifyArtist]] = None,
                  audio_features: Optional[SpotifyAudioFeatures] = None,
                  explicit: Optional[bool] = None):
         """Create a new SpotifyTrack instance
@@ -22,8 +26,10 @@ class SpotifyTrack:
             name (str): the name of the song
             track_id (str): the Spotify ID of the track
             -
-             popularity (Optional[int]): the popularity of the track, this should be a value from 0 to 100,
+            popularity (Optional[int]): the popularity of the track, this should be a value from 0 to 100,
                 with 100 being the most popular
+            album (Optional[SpotifyArtist]): the album associated to the track
+            artists (Optional[list[SpotifyArtist]]): the artists associated to the track
             duration (Optional[int]): the duration of the track in milliseconds
             audio_features (Optional[SpotifyAudioFeatures]): the audio features for the track
             explicit (Optional[bool]): indicates if the track is explicit or not
@@ -36,9 +42,17 @@ class SpotifyTrack:
         self.track_id = track_id
         # Keyword args
         self.popularity = popularity
+        self.album = album
+        self.artists = artists
         self.duration = duration
         self.audio_features = audio_features
         self._explicit = explicit
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"SpotifyTrack({self.name}, {self.track_id})"
 
     @property
     def is_explicit(self) -> Optional[bool]:

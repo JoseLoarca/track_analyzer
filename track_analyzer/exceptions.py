@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class SpotifyAuthenticationError(Exception):
     """Exception raised for Spotify authentication errors
     """
@@ -41,8 +44,27 @@ class SpotifyUnknownStatusError(Exception):
     """Exception raised for unknown status codes returned by Spotify
     """
 
-    def __int__(self, method: str, path: str, status_code: int):
+    def __init__(self, method: str, path: str, status_code: int):
         self.method = method
         self.path = path
         self.status_code = status_code
         super().__init__(f"The {method} request to Spotify's {path} has returned an unknown status code: {status_code}")
+
+
+class SpotifyInvalidContentError(Exception):
+    """Exception raised if invalid content is found in the Spotify API responses.
+
+    Examples:
+        When searching for a track, the Spotify API should return a field named "tracks", if this field is not returned,
+        we raise an error.
+    """
+
+    def __init__(self, method: str, path: str, error: Optional[str] = None):
+        self.method = method
+        self.path = path
+        self.error = error
+
+        exception_message = f"The {method} request to Spotify's {path} has returned a response with invalid content." \
+            if not error \
+            else f"The {method} request to Spotify's {path} has returned a response with invalid content. {error}"
+        super().__init__(exception_message)
