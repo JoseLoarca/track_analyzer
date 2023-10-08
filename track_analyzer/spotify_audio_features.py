@@ -1,0 +1,2 @@
+class SpotifyAudioFeatures:
+    pass
