@@ -28,6 +28,10 @@ class SpotifyTrack:
             audio_features (Optional[SpotifyAudioFeatures]): the audio features for the track
             explicit (Optional[bool]): indicates if the track is explicit or not
         """
+        # If provided, make sure popularity is between 0 and 100
+        if popularity is not None and not (0 <= popularity <= 100):
+            raise ValueError("The popularity of the artist should be between 0 and 100.")
+
         self.name = name
         self.track_id = track_id
         # Keyword args
@@ -42,7 +46,7 @@ class SpotifyTrack:
 
         Returns: a bool that indicates if the track is explicit or not. If the flag is not set, this will return None
         """
-        if self._explicit:
+        if self._explicit is not None:
             return self._explicit
 
     def human_duration(self) -> Optional[str]:
