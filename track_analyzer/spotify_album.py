@@ -1,8 +1,5 @@
 from typing import Optional, NamedTuple
 
-from .spotify_artist import SpotifyArtist
-from .spotify_track import SpotifyTrack
-
 # A list of the allowed album types
 ALLOWED_ALBUM_TYPES = ["single", "album", "compilation"]
 
@@ -32,8 +29,6 @@ class SpotifyAlbum:
                  image_url: Optional[str] = None,
                  popularity: Optional[int] = None,
                  total_tracks: Optional[int] = None,
-                 tracks: Optional[list[SpotifyTrack]] = None,
-                 artists: Optional[list[SpotifyArtist]] = None,
                  label: Optional[str] = None,
                  release_date: Optional[SpotifyAlbumReleaseDate] = None
                  ):
@@ -49,8 +44,6 @@ class SpotifyAlbum:
             popularity (Optional[int]): the popularity of the album, this should be a value from 0 to 100,
                 with 100 being the most popular
             total_tracks (Optional[int]): the number of tracks the album has
-            tracks (Optional[list[SpotifyTrack]]): the list of tracks the album has
-            artists (Optional[list[SpotifyArtist]]): the artists associated to the album
             label (Optional[str]): the label associated to the album
             release_date (Optional[SpotifyAlbumReleaseDate]): the album's release date
         """
@@ -70,7 +63,5 @@ class SpotifyAlbum:
         self.image_url = image_url
         self.popularity = popularity
         self.total_tracks = total_tracks
-        self.tracks = tracks
-        self.artists = artists
         self.label = label
         self.release_date = release_date

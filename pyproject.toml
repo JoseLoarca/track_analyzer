@@ -10,6 +10,8 @@ packages = [{include = "track_analyzer"}]
 python = "^3.11"
 requests = "^2.31.0"
 
+[tool.poetry.group.test.dependencies]
+faker = "^19.6.2"
 
 [build-system]
 requires = ["poetry-core"]
