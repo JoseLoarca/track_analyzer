@@ -1,7 +1,13 @@
 from typing import Optional
 
 
-class SpotifyAuthenticationError(Exception):
+class SpotifyException(Exception):
+    """Base Spotify exception
+    """
+    pass
+
+
+class SpotifyAuthenticationError(SpotifyException):
     """Exception raised for Spotify authentication errors
     """
 
@@ -10,7 +16,7 @@ class SpotifyAuthenticationError(Exception):
         super().__init__(f"Spotify authentication returned a {status_code} status code.")
 
 
-class SpotifyForbiddenOperationError(Exception):
+class SpotifyForbiddenOperationError(SpotifyException):
     """Exception raised for Spotify's forbidden error
     """
 
@@ -19,7 +25,7 @@ class SpotifyForbiddenOperationError(Exception):
         super().__init__(f"Spotify has forbidden the access to: {path}.")
 
 
-class SpotifyUnauthorizedError(Exception):
+class SpotifyUnauthorizedError(SpotifyException):
     """Exception raised for Spotify's unauthorized error.
 
     The difference between this and the forbidden error, is that when the forbidden error occurs the request's
@@ -32,7 +38,7 @@ class SpotifyUnauthorizedError(Exception):
         super().__init__(f"Could not authorize the request to Spotify's {path}.")
 
 
-class SpotifyLimitExceededError(Exception):
+class SpotifyLimitExceededError(SpotifyException):
     """Exception raised for Spotify's rate limit exceeded error
     """
 
@@ -40,7 +46,7 @@ class SpotifyLimitExceededError(Exception):
         super().__init__(f"The app has exceeded its rate limits. Try again later.")
 
 
-class SpotifyUnknownStatusError(Exception):
+class SpotifyUnknownStatusError(SpotifyException):
     """Exception raised for unknown status codes returned by Spotify
     """
 
@@ -51,7 +57,7 @@ class SpotifyUnknownStatusError(Exception):
         super().__init__(f"The {method} request to Spotify's {path} has returned an unknown status code: {status_code}")
 
 
-class SpotifyInvalidContentError(Exception):
+class SpotifyInvalidContentError(SpotifyException):
     """Exception raised if invalid content is found in the Spotify API responses.
 
     Examples:
