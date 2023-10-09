@@ -3,9 +3,10 @@ import os
 from typing import Optional
 
 from .auth import SpotifyAuth
-from .exceptions import SpotifyInvalidContentError
+from .exceptions import SpotifyInvalidContentError, SpotifyException
 from .spotify_album import SpotifyAlbum, SpotifyAlbumReleaseDate
 from .spotify_artist import SpotifyArtist
+from .spotify_audio_features import SpotifyAudioFeatures
 from .spotify_track import SpotifyTrack
 from .utils import make_http_request
 
@@ -16,6 +17,7 @@ TRACK: str = "track"
 
 # Spotify's paths:
 SEARCH: str = "search"
+AUDIO_FEATURES: str = "audio-features"
 
 
 class SpotifyClient:
@@ -36,7 +38,8 @@ class SpotifyClient:
                      query: str,
                      market: Optional[str] = None,
                      include_artists: bool = True,
-                     include_album: bool = True) -> Optional[SpotifyTrack]:
+                     include_album: bool = True,
+                     include_audio_features: bool = True) -> Optional[SpotifyTrack]:
         """Search for a track using the Spotify API. Currently, this search is limited to a single return value,
         meaning that if a matching track is found, then it is returned, else nothing is returned.
 
@@ -48,6 +51,8 @@ class SpotifyClient:
                 defaults to True
             include_album (bool): if returned, populate the album information in the returned SpotifyTrack,
                 defaults to True
+            include_audio_features (bool): if returned, populate the audio features information in the returned
+                SpotifyTrack, defaults to True
 
         Returns: if a matching track was found, a SpotifyTrack instance is returned, else None
         """
@@ -74,7 +79,39 @@ class SpotifyClient:
         logging.info('Matching track found, extracting the the information from the response...')
         spotify_track = _extract_track_info_from_response(track_info_from_response, include_album, include_artists)
 
+        if include_audio_features:
+            if spotify_audio_features := self._get_audio_features(spotify_track):
+                spotify_track.audio_features = spotify_audio_features
+            else:
+                logging.warning('Audio features were requested to be included in the track but they could not be '
+                                'fetched.')
+
         return spotify_track
+
+    def _get_audio_features(self, track: SpotifyTrack) -> Optional[SpotifyAudioFeatures]:
+        """Retrieve the audio features for the given track
+
+        Args:
+            track (SpotifyTrack): the track that needs its audio features fetched
+
+        Returns: a SpotifyAudioFeatures instance
+        """
+        path = f"{AUDIO_FEATURES}/{track.track_id}"
+        # Make the HTTP request
+        try:
+            result = make_http_request(self.base_url, path, self._auth.access_token)
+
+            # Create and return the audio features
+            return SpotifyAudioFeatures(danceability=result.get("danceability"), energy=result.get("energy"),
+                                        loudness=result.get("loudness"), mode=result.get("mode"),
+                                        speechiness=result.get("speechiness"), tempo=result.get("tempo"),
+                                        acousticness=result.get("acousticness"),
+                                        instrumentalness=result.get("instrumentalness"),
+                                        liveness=result.get("liveness"), valence=result.get("valence"))
+        except SpotifyException as e:
+            logging.warning(
+                f"An error has occurred while trying to get the audio features for the {track.track_id} track. {e}")
+            return None
 
 
 def _extract_track_info_from_response(track_info_from_response: dict,
