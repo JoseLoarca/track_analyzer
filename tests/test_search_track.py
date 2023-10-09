@@ -4,10 +4,11 @@ from unittest.mock import MagicMock
 import requests
 
 from track_analyzer.client import SpotifyClient
+from track_analyzer.exceptions import SpotifyInvalidContentError
 from track_analyzer.spotify_album import SpotifyAlbum, SpotifyAlbumReleaseDate
 from track_analyzer.spotify_artist import SpotifyArtist
 from track_analyzer.spotify_track import SpotifyTrack
-from .utils import mocked_search_track_response
+from utils import mocked_search_track_response
 
 
 @mock.patch('track_analyzer.auth.SpotifyAuth.access_token', return_value='my_access_token')
@@ -73,6 +74,16 @@ class TestSearchTrack(TestCase):
 
         # Assert the return value is None
         self.assertIsNone(spotify_track)
+
+    def test_search_track_invalid_response(self, mock_requests_get, mock_access_token):
+        """Test the search track function raises an error if the response from the Spotify API contains invalid data
+        """
+        # Mock the request to the Spotify API
+        mock_requests_get.return_value.status_code = requests.codes.ok
+        mock_requests_get.return_value.json = MagicMock(return_value={"message": "This is an invalid response!"})
+
+        with self.assertRaises(SpotifyInvalidContentError):
+            self.spotify_client.search_track('search for a track')
 
 
 if __name__ == '__main__':
