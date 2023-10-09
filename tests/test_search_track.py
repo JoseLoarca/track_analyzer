@@ -8,7 +8,7 @@ from track_analyzer.exceptions import SpotifyInvalidContentError
 from track_analyzer.spotify_album import SpotifyAlbum, SpotifyAlbumReleaseDate
 from track_analyzer.spotify_artist import SpotifyArtist
 from track_analyzer.spotify_track import SpotifyTrack
-from utils import mocked_search_track_response
+from .utils import mocked_search_track_response
 
 
 @mock.patch('track_analyzer.auth.SpotifyAuth.access_token', return_value='my_access_token')
