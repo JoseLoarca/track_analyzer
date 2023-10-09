@@ -116,7 +116,7 @@ def _extract_track_info_from_response(track_info_from_response: dict,
     # Create and return the track
     spotify_track = SpotifyTrack(track_info_from_response.get("name"), track_info_from_response.get("id"),
                                  popularity=track_info_from_response.get("popularity"),
-                                 duration=track_info_from_response.get("duration_in_ms"),
+                                 duration=track_info_from_response.get("duration_ms"),
                                  explicit=track_info_from_response.get("explicit"),
                                  album=spotify_album, artists=spotify_artists)
     logging.info(f"Finished extracting track data for {spotify_track.name} ({spotify_track.track_id})")
